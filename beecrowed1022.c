@@ -1,56 +1,40 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-// Function to calculate GCD using Euclidean algorithm
+// Function to find the Greatest Common Divisor
 int gcd(int a, int b) {
-    if (a < 0) a = -a;
-    if (b < 0) b = -b;
-    while (b != 0) {
-        int temp = b;
-        b = a % b;
-        a = temp;
-    }
-    return a;
+    if (b == 0) return a < 0 ? -a : a; // Return positive GCD
+    return gcd(b, a % b);
 }
 
 int main() {
-    int n, n1, d1, n2, d2;
+    int n, n1, d1, n2, d2, resNum, resDen, common;
     char op, slash;
 
-    // Read number of test cases
     if (scanf("%d", &n) != 1) return 0;
 
     while (n--) {
-        // Read input format: N1 / D1 [op] N2 / D2
+        // Read format: N1 / D1 [OP] N2 / D2
         scanf("%d %c %d %c %d %c %d", &n1, &slash, &d1, &op, &n2, &slash, &d2);
 
-        int res_num, res_den;
-
-        // Apply operation logic
-        switch (op) {
-            case '+':
-                res_num = (n1 * d2 + n2 * d1);
-                res_den = (d1 * d2);
-                break;
-            case '-':
-                res_num = (n1 * d2 - n2 * d1);
-                res_den = (d1 * d2);
-                break;
-            case '*':
-                res_num = (n1 * n2);
-                res_den = (d1 * d2);
-                break;
-            case '/':
-                res_num = (n1 * d2);
-                res_den = (n2 * d1);
-                break;
+        if (op == '+') {
+            resNum = (n1 * d2 + n2 * d1);
+            resDen = (d1 * d2);
+        } else if (op == '-') {
+            resNum = (n1 * d2 - n2 * d1);
+            resDen = (d1 * d2);
+        } else if (op == '*') {
+            resNum = (n1 * n2);
+            resDen = (d1 * d2);
+        } else if (op == '/') {
+            resNum = (n1 * d2);
+            resDen = (n2 * d1);
         }
 
-        // Find simplification factor
-        int common = gcd(res_num, res_den);
+        // Find the absolute GCD to simplify the fraction
+        common = gcd(resNum, resDen);
 
-        // Output format: Original = Simplified
-        printf("%d/%d = %d/%d\n", res_num, res_den, res_num / common, res_den / common);
+        printf("%d/%d = %d/%d\n", resNum, resDen, resNum / common, resDen / common);
     }
 
     return 0;
